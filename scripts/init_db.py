@@ -2,30 +2,26 @@ import sqlite3
 import os
 
 def init_db():
-    # 1. 檢查並建立存放資料庫的資料夾
+    # 1. 確保資料夾存在
     if not os.path.exists('data'):
         os.makedirs('data')
         print("📁 已建立 data 資料夾")
 
-    # 2. 連接到資料庫檔案 (如果不存在會自動建立)
-    # 檔案會出現在 data/travel.db
+    # 2. 連接到資料庫
     conn = sqlite3.connect('data/travel.db')
     cursor = conn.cursor()
 
-    print("⏳ 正在初始化資料庫結構...")
+    print("⏳ 正在初始化專業版地理階層資料表...")
 
-    # 3. 建立景點資料表 (attractions)
-    # id: 主鍵，自動遞增
-    # name: 景點名稱
-    # city: 縣市 (例如：桃園市、台北市)
-    # category: 分類 (例如：自然步道、文創、美食)
-    # content: 詳細介紹
-    # source: 資料來源 (例如：Gemini, Ollama, Scraper)
+    # 3. 建立具備「縣市」與「鄉鎮市區」層級的資料表
+    # province_state: 存放第一級行政區（如：桃園市、雲林縣）
+    # district: 存放第二級行政區（如：中壢區、斗六市）
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS attractions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            city TEXT,
+            province_state TEXT,
+            district TEXT,
             category TEXT,
             content TEXT,
             source TEXT,
@@ -33,10 +29,10 @@ def init_db():
         )
     ''')
 
-    # 4. 提交變更並關閉連線
     conn.commit()
     conn.close()
-    print("✅ 資料庫初始化成功！位置：data/travel.db")
+    print("✅ 資料庫初始化成功！")
+    print("📊 目前結構：[ID, 名稱, 縣市, 鄉鎮市區, 分類, 內容, 來源, 建立時間]")
 
 if __name__ == "__main__":
     init_db()
