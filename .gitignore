@@ -1,0 +1,17 @@
+# 敏感資訊
+.env
+
+# 資料庫檔案
+data/*.db
+*.sqlite3
+
+# Python 虛擬環境
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# IDE 設定
+.vscode/
+.idea/
